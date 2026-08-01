@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.routers import health_router
 from app.core.config import settings
 from app.core.exception_handlers import register_exception_handlers
 from app.core.logging import logger
@@ -10,6 +11,11 @@ app = FastAPI(
 )
 
 register_exception_handlers(app)
+
+app.include_router(
+    health_router,
+    prefix=settings.API_V1_PREFIX,
+)
 
 
 @app.on_event("startup")
