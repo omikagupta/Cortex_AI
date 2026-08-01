@@ -1,0 +1,67 @@
+from datetime import datetime
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
+from app.core.exceptions import AppException
+from app.schemas.error_response import ErrorResponse
+
+
+def register_exception_handlers(app: FastAPI) -> None:
+
+    @app.exception_handler(AppException)
+    async def app_exception_handler(
+        request: Request,
+        exc: AppException,
+    ):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=ErrorResponse(
+                message=exc.message,
+                error_code=exc.error_code,
+                timestamp=datetime.utcnow(),
+            ).model_dump(mode="json"),
+        )
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(
+        request: Request,
+        exc: RequestValidationError,
+    ):
+        return JSONResponse(
+            status_code=422,
+            content=ErrorResponse(
+                message="Validation failed",
+                error_code="VALIDATION_ERROR",
+                timestamp=datetime.utcnow(),
+            ).model_dump(mode="json"),
+        )
+
+    @app.exception_handler(HTTPException)
+    async def http_exception_handler(
+        request: Request,
+        exc: HTTPException,
+    ):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=ErrorResponse(
+                message=str(exc.detail),
+                error_code="HTTP_ERROR",
+                timestamp=datetime.utcnow(),
+            ).model_dump(mode="json"),
+        )
+
+    @app.exception_handler(Exception)
+    async def unexpected_exception_handler(
+        request: Request,
+        exc: Exception,
+    ):
+        return JSONResponse(
+            status_code=500,
+            content=ErrorResponse(
+                message="Internal Server Error",
+                error_code="INTERNAL_SERVER_ERROR",
+                timestamp=datetime.utcnow(),
+            ).model_dump(mode="json"),
+        )
