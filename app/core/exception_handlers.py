@@ -5,16 +5,18 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.core.exceptions import AppException
+from app.core.logging import logger
 from app.schemas.error_response import ErrorResponse
 
 
 def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(AppException)
-    async def app_exception_handler(
-        request: Request,
-        exc: AppException,
-    ):
+    async def app_exception_handler(request: Request, exc: AppException):
+        logger.warning(
+            f"{request.method} {request.url.path} - {exc.error_code}: {exc.message}"
+        )
+
         return JSONResponse(
             status_code=exc.status_code,
             content=ErrorResponse(
@@ -25,10 +27,11 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(
-        request: Request,
-        exc: RequestValidationError,
-    ):
+    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        logger.warning(
+            f"{request.method} {request.url.path} - Validation Error - {exc.errors()}"
+        )
+
         return JSONResponse(
             status_code=422,
             content=ErrorResponse(
@@ -39,10 +42,11 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(HTTPException)
-    async def http_exception_handler(
-        request: Request,
-        exc: HTTPException,
-    ):
+    async def http_exception_handler(request: Request, exc: HTTPException):
+        logger.warning(
+            f"{request.method} {request.url.path} - HTTP {exc.status_code}: {exc.detail}"
+        )
+
         return JSONResponse(
             status_code=exc.status_code,
             content=ErrorResponse(
@@ -53,10 +57,11 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(Exception)
-    async def unexpected_exception_handler(
-        request: Request,
-        exc: Exception,
-    ):
+    async def unexpected_exception_handler(request: Request, exc: Exception):
+        logger.exception(
+            f"Unhandled exception while processing {request.method} {request.url.path}"
+        )
+
         return JSONResponse(
             status_code=500,
             content=ErrorResponse(
