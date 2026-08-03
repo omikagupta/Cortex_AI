@@ -1,4 +1,5 @@
 from datetime import datetime
+import traceback
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -27,7 +28,10 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    async def validation_exception_handler(
+        request: Request,
+        exc: RequestValidationError,
+    ):
         logger.warning(
             f"{request.method} {request.url.path} - Validation Error - {exc.errors()}"
         )
@@ -42,7 +46,10 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(HTTPException)
-    async def http_exception_handler(request: Request, exc: HTTPException):
+    async def http_exception_handler(
+        request: Request,
+        exc: HTTPException,
+    ):
         logger.warning(
             f"{request.method} {request.url.path} - HTTP {exc.status_code}: {exc.detail}"
         )
@@ -57,16 +64,21 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(Exception)
-    async def unexpected_exception_handler(request: Request, exc: Exception):
-        logger.exception(
-            f"Unhandled exception while processing {request.method} {request.url.path}"
-        )
+    async def unexpected_exception_handler(
+        request: Request,
+        exc: Exception,
+    ):
+        print("\n" + "=" * 80)
+        print("UNHANDLED EXCEPTION")
+        traceback.print_exception(type(exc), exc, exc.__traceback__)
+        print("=" * 80 + "\n")
+
+        logger.exception("Unhandled exception")
 
         return JSONResponse(
             status_code=500,
-            content=ErrorResponse(
-                message="Internal Server Error",
-                error_code="INTERNAL_SERVER_ERROR",
-                timestamp=datetime.utcnow(),
-            ).model_dump(mode="json"),
+            content={
+                "message": str(exc),
+                "type": type(exc).__name__,
+            },
         )
