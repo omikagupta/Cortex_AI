@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -44,5 +46,21 @@ def get_my_workspaces(
 ):
     return service.get_user_workspaces(
         db,
+        current_user.id,
+    )
+
+
+@router.get(
+    "/{workspace_id}",
+    response_model=WorkspaceResponse,
+)
+def get_workspace(
+    workspace_id: UUID,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return service.get_workspace(
+        db,
+        workspace_id,
         current_user.id,
     )

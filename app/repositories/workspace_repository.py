@@ -25,3 +25,29 @@ class WorkspaceRepository:
             .filter(Workspace.owner_id == owner_id)
             .all()
         )
+
+    def get_by_id(
+        self,
+        db: Session,
+        workspace_id,
+    ):
+        return (
+            db.query(Workspace)
+            .filter(Workspace.id == workspace_id)
+            .first()
+        )
+
+    def get_by_id_and_owner(
+        self,
+        db: Session,
+        workspace_id,
+        owner_id,
+    ):
+        return (
+            db.query(Workspace)
+            .filter(
+                Workspace.id == workspace_id,
+                Workspace.owner_id == owner_id,
+            )
+            .first()
+        )

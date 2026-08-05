@@ -1541,3 +1541,51 @@ FROM workspaces
 WHERE workspaces.id = %(pk_1)s::UUID
 2026-08-05 15:02:34,672 | INFO | sqlalchemy.engine.Engine | [generated in 0.00046s] {'pk_1': UUID('a5e0b9e2-8df3-49e6-b0ff-ef4d943c15ef')}
 2026-08-05 15:02:34,679 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-05 21:05:25,060 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-05 21:06:09,329 | INFO | sqlalchemy.engine.Engine | select pg_catalog.version()
+2026-08-05 21:06:09,330 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-05 21:06:09,344 | INFO | sqlalchemy.engine.Engine | select current_schema()
+2026-08-05 21:06:09,346 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-05 21:06:09,356 | INFO | sqlalchemy.engine.Engine | show standard_conforming_strings
+2026-08-05 21:06:09,358 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-05 21:06:09,363 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-05 21:06:09,404 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2026-08-05 21:06:09,413 | INFO | sqlalchemy.engine.Engine | [generated in 0.00747s] {'email_1': 'omika@gmail.com', 'param_1': 1}
+2026-08-05 21:06:09,461 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\omika\AppData\Roaming\Python\Python313\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-08-05 21:06:11,237 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-05 21:08:25,694 | WARNING | ai_workspace_agent | GET /api/v1/workspaces - HTTP 401: Not authenticated
+2026-08-05 21:10:14,699 | WARNING | ai_workspace_agent | GET /api/v1/workspaces - HTTP 401: Not authenticated
+2026-08-05 21:11:01,300 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-05 21:11:01,301 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2026-08-05 21:11:01,301 | INFO | sqlalchemy.engine.Engine | [cached since 291.9s ago] {'email_1': 'omika@gmail.com', 'param_1': 1}
+2026-08-05 21:11:01,874 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-05 21:11:31,134 | WARNING | ai_workspace_agent | GET /api/v1/workspaces - HTTP 401: Not authenticated
+2026-08-05 21:12:21,729 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-05 21:12:21,732 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s::UUID 
+ LIMIT %(param_1)s
+2026-08-05 21:12:21,733 | INFO | sqlalchemy.engine.Engine | [generated in 0.00111s] {'id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'param_1': 1}
+2026-08-05 21:12:21,740 | INFO | sqlalchemy.engine.Engine | SELECT workspaces.id AS workspaces_id, workspaces.name AS workspaces_name, workspaces.description AS workspaces_description, workspaces.owner_id AS workspaces_owner_id, workspaces.created_at AS workspaces_created_at, workspaces.updated_at AS workspaces_updated_at 
+FROM workspaces 
+WHERE workspaces.owner_id = %(owner_id_1)s::UUID
+2026-08-05 21:12:21,741 | INFO | sqlalchemy.engine.Engine | [generated in 0.00116s] {'owner_id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d')}
+2026-08-05 21:12:21,750 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-05 21:47:48,367 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-05 21:47:48,383 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2026-08-05 21:47:48,385 | INFO | sqlalchemy.engine.Engine | [cached since 2499s ago] {'email_1': 'omika@gmail.com', 'param_1': 1}
+2026-08-05 21:47:49,231 | INFO | sqlalchemy.engine.Engine | ROLLBACK

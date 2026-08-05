@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models import Workspace
@@ -36,3 +37,23 @@ class WorkspaceService:
             db,
             user_id,
         )
+
+    def get_workspace(
+        self,
+        db: Session,
+        workspace_id,
+        owner_id,
+    ):
+        workspace = self.repository.get_by_id_and_owner(
+            db,
+            workspace_id,
+            owner_id,
+        )
+
+        if workspace is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Workspace not found",
+            )
+
+        return workspace
