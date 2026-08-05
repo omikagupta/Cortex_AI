@@ -83,3 +83,18 @@ def update_workspace(
         current_user.id,
         workspace,
     )
+
+
+@router.delete(
+    "/{workspace_id}",
+)
+def delete_workspace(
+    workspace_id: UUID,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return service.delete_workspace(
+        db,
+        workspace_id,
+        current_user.id,
+    )

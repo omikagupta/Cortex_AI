@@ -60,3 +60,11 @@ class WorkspaceRepository:
         db.commit()
         db.refresh(workspace)
         return workspace
+
+    def delete(
+        self,
+        db: Session,
+        workspace: Workspace,
+    ):
+        db.delete(workspace)
+        db.commit()

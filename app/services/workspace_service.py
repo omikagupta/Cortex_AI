@@ -87,3 +87,30 @@ class WorkspaceService:
             db,
             workspace,
         )
+
+    def delete_workspace(
+        self,
+        db: Session,
+        workspace_id,
+        owner_id,
+    ):
+        workspace = self.repository.get_by_id_and_owner(
+            db,
+            workspace_id,
+            owner_id,
+        )
+
+        if workspace is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Workspace not found",
+            )
+
+        self.repository.delete(
+            db,
+            workspace,
+        )
+
+        return {
+            "message": "Workspace deleted successfully"
+        }
