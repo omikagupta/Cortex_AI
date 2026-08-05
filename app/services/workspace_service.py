@@ -3,7 +3,10 @@ from sqlalchemy.orm import Session
 
 from app.models import Workspace
 from app.repositories import WorkspaceRepository
-from app.schemas import WorkspaceCreate
+from app.schemas import (
+    WorkspaceCreate,
+    WorkspaceUpdate,
+)
 
 
 class WorkspaceService:
@@ -57,3 +60,30 @@ class WorkspaceService:
             )
 
         return workspace
+
+    def update_workspace(
+        self,
+        db: Session,
+        workspace_id,
+        owner_id,
+        workspace_data: WorkspaceUpdate,
+    ):
+        workspace = self.repository.get_by_id_and_owner(
+            db,
+            workspace_id,
+            owner_id,
+        )
+
+        if workspace is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Workspace not found",
+            )
+
+        workspace.name = workspace_data.name
+        workspace.description = workspace_data.description
+
+        return self.repository.update(
+            db,
+            workspace,
+        )

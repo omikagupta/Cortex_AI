@@ -7,6 +7,7 @@ from app.api.dependencies.auth import get_current_user
 from app.api.dependencies.database import get_db
 from app.schemas import (
     WorkspaceCreate,
+    WorkspaceUpdate,
     WorkspaceResponse,
 )
 from app.services import WorkspaceService
@@ -63,4 +64,22 @@ def get_workspace(
         db,
         workspace_id,
         current_user.id,
+    )
+
+
+@router.put(
+    "/{workspace_id}",
+    response_model=WorkspaceResponse,
+)
+def update_workspace(
+    workspace_id: UUID,
+    workspace: WorkspaceUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    return service.update_workspace(
+        db,
+        workspace_id,
+        current_user.id,
+        workspace,
     )

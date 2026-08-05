@@ -51,3 +51,12 @@ class WorkspaceRepository:
             )
             .first()
         )
+
+    def update(
+        self,
+        db: Session,
+        workspace: Workspace,
+    ):
+        db.commit()
+        db.refresh(workspace)
+        return workspace

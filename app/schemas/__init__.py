@@ -10,6 +10,7 @@ from app.schemas.auth import (
 
 from app.schemas.workspace import (
     WorkspaceCreate,
+    WorkspaceUpdate,
     WorkspaceResponse,
 )
 
@@ -19,5 +20,6 @@ __all__ = [
     "LoginRequest",
     "TokenResponse",
     "WorkspaceCreate",
+    "WorkspaceUpdate",
     "WorkspaceResponse",
 ]
