@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 import traceback
 
+from app.api.dependencies.auth import get_current_user
 from app.api.dependencies.database import get_db
 from app.schemas import UserCreate, UserResponse
 from app.services import UserService
@@ -28,3 +29,10 @@ def register_user(
     except Exception as e:
         traceback.print_exc()
         raise e
+
+
+@router.get("/me")
+def get_me(
+    current_user=Depends(get_current_user),
+):
+    return current_user
