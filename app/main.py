@@ -5,6 +5,7 @@ from app.api.routers import (
     users_router,
     auth_router,
     workspaces_router,
+    notes_router,
 )
 
 from app.core.config import settings
@@ -42,8 +43,14 @@ app.include_router(
     prefix=settings.API_V1_PREFIX,
 )
 
+app.include_router(
+    notes_router,
+    prefix=settings.API_V1_PREFIX,
+)
+
 # Print all registered routes
 logger.info("Registered Routes:")
+
 print("\n========== REGISTERED ROUTES ==========")
 for route in app.routes:
     print(route.path)

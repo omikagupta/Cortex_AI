@@ -14,6 +14,12 @@ from app.schemas.workspace import (
     WorkspaceResponse,
 )
 
+from app.schemas.note import (
+    NoteCreate,
+    NoteUpdate,
+    NoteResponse,
+)
+
 __all__ = [
     "UserCreate",
     "UserResponse",
@@ -22,4 +28,7 @@ __all__ = [
     "WorkspaceCreate",
     "WorkspaceUpdate",
     "WorkspaceResponse",
+    "NoteCreate",
+    "NoteUpdate",
+    "NoteResponse",
 ]
