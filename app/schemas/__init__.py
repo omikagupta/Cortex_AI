@@ -19,7 +19,7 @@ from app.schemas.note import (
     NoteUpdate,
     NoteResponse,
 )
-
+from app.schemas.document import DocumentResponse
 __all__ = [
     "UserCreate",
     "UserResponse",
@@ -31,4 +31,5 @@ __all__ = [
     "NoteCreate",
     "NoteUpdate",
     "NoteResponse",
+    "DocumentResponse",
 ]

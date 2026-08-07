@@ -97,3 +97,4 @@ def delete_note(
         db,
         note_id,
     )
+ 
