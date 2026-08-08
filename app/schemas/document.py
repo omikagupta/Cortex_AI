@@ -12,6 +12,7 @@ class DocumentResponse(BaseModel):
     file_path: str
     file_size: int
     content_type: str
+    extracted_text: str | None
     workspace_id: UUID
     created_at: datetime
     updated_at: datetime

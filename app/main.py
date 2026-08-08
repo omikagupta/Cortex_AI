@@ -6,12 +6,12 @@ from app.api.routers import (
     auth_router,
     workspaces_router,
     notes_router,
+    documents_router,
 )
 
 from app.core.config import settings
 from app.core.exception_handlers import register_exception_handlers
 from app.core.logging import logger
-
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -45,6 +45,11 @@ app.include_router(
 
 app.include_router(
     notes_router,
+    prefix=settings.API_V1_PREFIX,
+)
+print("INCLUDING DOCUMENTS ROUTER")
+app.include_router(
+    documents_router,
     prefix=settings.API_V1_PREFIX,
 )
 

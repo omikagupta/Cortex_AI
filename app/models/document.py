@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -35,6 +35,12 @@ class Document(Base, TimestampMixin):
     content_type: Mapped[str] = mapped_column(
         String,
         nullable=False,
+    )
+
+    # NEW: extracted text from the document
+    extracted_text: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     workspace_id: Mapped[uuid.UUID] = mapped_column(
