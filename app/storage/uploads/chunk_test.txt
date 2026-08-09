@@ -1,0 +1,11 @@
+Document Intelligence is the process of converting unstructured documents into machine-readable information.
+
+PDF files can contain paragraphs, tables, headings and other information.
+
+The extracted text can be divided into smaller chunks.
+
+These chunks can later be converted into embeddings.
+
+Embeddings allow the system to perform semantic search over documents.
+
+The retrieved chunks can then be provided to an AI model as context.

@@ -10,10 +10,17 @@ class DocumentRepository:
         db: Session,
         document: Document,
     ) -> Document:
-        db.add(document)
-        db.commit()
-        db.refresh(document)
-        return document
+
+        try:
+            db.add(document)
+            db.commit()
+            db.refresh(document)
+
+            return document
+
+        except Exception:
+            db.rollback()
+            raise
 
     def get_by_workspace(
         self,
@@ -22,7 +29,9 @@ class DocumentRepository:
     ):
         return (
             db.query(Document)
-            .filter(Document.workspace_id == workspace_id)
+            .filter(
+                Document.workspace_id == workspace_id
+            )
             .all()
         )
 
@@ -33,7 +42,9 @@ class DocumentRepository:
     ):
         return (
             db.query(Document)
-            .filter(Document.id == document_id)
+            .filter(
+                Document.id == document_id
+            )
             .first()
         )
 
@@ -42,5 +53,10 @@ class DocumentRepository:
         db: Session,
         document: Document,
     ):
-        db.delete(document)
-        db.commit()
+        try:
+            db.delete(document)
+            db.commit()
+
+        except Exception:
+            db.rollback()
+            raise

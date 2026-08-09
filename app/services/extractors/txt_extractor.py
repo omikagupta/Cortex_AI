@@ -1,0 +1,11 @@
+from pathlib import Path
+
+
+def extract_txt_text(file_path: str) -> str:
+
+    path = Path(file_path)
+
+    return path.read_text(
+        encoding="utf-8",
+        errors="replace",
+    )

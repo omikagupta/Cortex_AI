@@ -58,6 +58,7 @@ class Settings(BaseSettings):
     OLLAMA_BASE_URL: str
     EMBEDDING_MODEL: str
     LLM_MODEL: str
+    GEMINI_API_KEY: str
 
     @property
     def DATABASE_URL(self) -> str:
