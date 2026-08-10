@@ -1,47 +1,57 @@
-from docx import Document
+import zipfile
+import xml.etree.ElementTree as ET
+
+
+WORD_NAMESPACE = "http://purl.oclc.org/ooxml/wordprocessingml/main"
 
 
 def extract_docx_text(file_path: str) -> str:
-
     print("DOCX EXTRACTOR CALLED")
     print("Path:", file_path)
 
-    document = Document(file_path)
+    with zipfile.ZipFile(file_path, "r") as archive:
 
-    extracted_parts = []
+        if "word/document.xml" not in archive.namelist():
+            raise ValueError(
+                "Invalid DOCX: word/document.xml is missing"
+            )
 
-    # Paragraphs
-    for paragraph in document.paragraphs:
+        document_xml = archive.read("word/document.xml")
 
-        text = paragraph.text.strip()
+    root = ET.fromstring(document_xml)
 
-        if text:
-            extracted_parts.append(text)
+    paragraphs = []
 
-    # Tables
-    for table in document.tables:
+    for paragraph in root.iter(
+        f"{{{WORD_NAMESPACE}}}p"
+    ):
 
-        for row in table.rows:
+        text_parts = []
 
-            row_text = []
+        for text_node in paragraph.iter(
+            f"{{{WORD_NAMESPACE}}}t"
+        ):
 
-            for cell in row.cells:
+            if text_node.text:
+                text_parts.append(text_node.text)
 
-                cell_text = cell.text.strip()
+        paragraph_text = "".join(text_parts).strip()
 
-                if cell_text:
-                    row_text.append(cell_text)
+        if paragraph_text:
+            paragraphs.append(paragraph_text)
 
-            if row_text:
-                extracted_parts.append(
-                    " | ".join(row_text)
-                )
+    if not paragraphs:
+        raise ValueError(
+            "DOCX extraction failed: no text paragraphs found"
+        )
 
-    result = "\n".join(extracted_parts)
+    extracted_text = "\n".join(paragraphs)
 
-    print(
-        "DOCX EXTRACTION LENGTH:",
-        len(result)
-    )
+    print("DOCX EXTRACTION SUCCESSFUL")
+    print("Paragraphs:", len(paragraphs))
+    print("Text length:", len(extracted_text))
 
-    return result
+    print("First 200 characters:")
+    print(extracted_text[:200])
+
+    return extracted_text

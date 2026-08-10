@@ -2730,3 +2730,93 @@ WHERE documents.id = %(pk_1)s::UUID
 2026-08-09 11:44:28,932 | INFO | ai_workspace_agent | Registered Routes:
 2026-08-09 11:59:49,745 | INFO | ai_workspace_agent | Registered Routes:
 2026-08-09 12:04:52,666 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 20:44:29,868 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 20:45:02,761 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 20:50:33,677 | INFO | sqlalchemy.engine.Engine | select pg_catalog.version()
+2026-08-10 20:50:33,678 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 20:50:33,684 | INFO | sqlalchemy.engine.Engine | select current_schema()
+2026-08-10 20:50:33,685 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 20:50:33,688 | INFO | sqlalchemy.engine.Engine | show standard_conforming_strings
+2026-08-10 20:50:33,689 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 20:50:33,691 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:50:33,701 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2026-08-10 20:50:33,702 | INFO | sqlalchemy.engine.Engine | [generated in 0.00100s] {'email_1': 'omika@gmail.com', 'param_1': 1}
+2026-08-10 20:50:33,714 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\omika\AppData\Roaming\Python\Python313\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-08-10 20:50:34,414 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-10 20:50:49,130 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:50:49,133 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s::UUID 
+ LIMIT %(param_1)s
+2026-08-10 20:50:49,133 | INFO | sqlalchemy.engine.Engine | [generated in 0.00085s] {'id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'param_1': 1}
+2026-08-10 20:50:49,143 | INFO | sqlalchemy.engine.Engine | INSERT INTO workspaces (id, name, description, owner_id, created_at, updated_at) VALUES (%(id)s::UUID, %(name)s, %(description)s, %(owner_id)s::UUID, %(created_at)s, %(updated_at)s)
+2026-08-10 20:50:49,144 | INFO | sqlalchemy.engine.Engine | [generated in 0.00122s] {'id': UUID('44496475-c6f2-4aea-9173-5b5ee7c00470'), 'name': 'Document Intelligence Workspace', 'description': 'Testing document upload and text extraction', 'owner_id': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'created_at': datetime.datetime(2026, 8, 10, 15, 20, 49, 143371, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2026, 8, 10, 15, 20, 49, 143379, tzinfo=datetime.timezone.utc)}
+2026-08-10 20:50:49,152 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-08-10 20:50:49,159 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:50:49,162 | INFO | sqlalchemy.engine.Engine | SELECT workspaces.id, workspaces.name, workspaces.description, workspaces.owner_id, workspaces.created_at, workspaces.updated_at 
+FROM workspaces 
+WHERE workspaces.id = %(pk_1)s::UUID
+2026-08-10 20:50:49,163 | INFO | sqlalchemy.engine.Engine | [generated in 0.00110s] {'pk_1': UUID('44496475-c6f2-4aea-9173-5b5ee7c00470')}
+2026-08-10 20:50:49,174 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-10 20:51:31,407 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:51:31,409 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s::UUID 
+ LIMIT %(param_1)s
+2026-08-10 20:51:31,409 | INFO | sqlalchemy.engine.Engine | [cached since 42.28s ago] {'id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'param_1': 1}
+2026-08-10 20:51:31,467 | INFO | sqlalchemy.engine.Engine | INSERT INTO documents (id, filename, file_path, file_size, content_type, extracted_text, status, workspace_id, created_at, updated_at) VALUES (%(id)s::UUID, %(filename)s, %(file_path)s, %(file_size)s, %(content_type)s, %(extracted_text)s, %(status)s, %(workspace_id)s::UUID, %(created_at)s, %(updated_at)s)
+2026-08-10 20:51:31,467 | INFO | sqlalchemy.engine.Engine | [generated in 0.00112s] {'id': UUID('0f456324-1214-4257-967a-146b78870b61'), 'filename': 'ICICIS_FINAL.docx', 'file_path': 'app\\storage\\uploads\\ICICIS_FINAL.docx', 'file_size': 64183, 'content_type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'extracted_text': None, 'status': 'FAILED', 'workspace_id': UUID('44496475-c6f2-4aea-9173-5b5ee7c00470'), 'created_at': datetime.datetime(2026, 8, 10, 15, 21, 31, 467025, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2026, 8, 10, 15, 21, 31, 467033, tzinfo=datetime.timezone.utc)}
+2026-08-10 20:51:31,472 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-08-10 20:51:31,476 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:51:31,487 | INFO | sqlalchemy.engine.Engine | SELECT documents.id, documents.filename, documents.file_path, documents.file_size, documents.content_type, documents.extracted_text, documents.status, documents.workspace_id, documents.created_at, documents.updated_at 
+FROM documents 
+WHERE documents.id = %(pk_1)s::UUID
+2026-08-10 20:51:31,489 | INFO | sqlalchemy.engine.Engine | [generated in 0.00189s] {'pk_1': UUID('0f456324-1214-4257-967a-146b78870b61')}
+2026-08-10 20:51:31,498 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-10 20:51:59,198 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:51:59,199 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s::UUID 
+ LIMIT %(param_1)s
+2026-08-10 20:51:59,200 | INFO | sqlalchemy.engine.Engine | [cached since 70.07s ago] {'id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'param_1': 1}
+2026-08-10 20:51:59,243 | INFO | sqlalchemy.engine.Engine | INSERT INTO documents (id, filename, file_path, file_size, content_type, extracted_text, status, workspace_id, created_at, updated_at) VALUES (%(id)s::UUID, %(filename)s, %(file_path)s, %(file_size)s, %(content_type)s, %(extracted_text)s, %(status)s, %(workspace_id)s::UUID, %(created_at)s, %(updated_at)s)
+2026-08-10 20:51:59,244 | INFO | sqlalchemy.engine.Engine | [cached since 27.78s ago] {'id': UUID('e8937b49-a7ca-489a-8303-e0ad5696d259'), 'filename': 'ICICIS_FINAL.docx', 'file_path': 'app\\storage\\uploads\\ICICIS_FINAL.docx', 'file_size': 64183, 'content_type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'extracted_text': None, 'status': 'FAILED', 'workspace_id': UUID('44496475-c6f2-4aea-9173-5b5ee7c00470'), 'created_at': datetime.datetime(2026, 8, 10, 15, 21, 59, 243300, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2026, 8, 10, 15, 21, 59, 243306, tzinfo=datetime.timezone.utc)}
+2026-08-10 20:51:59,315 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-08-10 20:51:59,318 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 20:51:59,319 | INFO | sqlalchemy.engine.Engine | SELECT documents.id, documents.filename, documents.file_path, documents.file_size, documents.content_type, documents.extracted_text, documents.status, documents.workspace_id, documents.created_at, documents.updated_at 
+FROM documents 
+WHERE documents.id = %(pk_1)s::UUID
+2026-08-10 20:51:59,320 | INFO | sqlalchemy.engine.Engine | [cached since 27.83s ago] {'pk_1': UUID('e8937b49-a7ca-489a-8303-e0ad5696d259')}
+2026-08-10 20:51:59,327 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-10 20:53:48,986 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 21:03:23,100 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 21:04:28,789 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-10 21:04:37,466 | INFO | sqlalchemy.engine.Engine | select pg_catalog.version()
+2026-08-10 21:04:37,466 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 21:04:37,469 | INFO | sqlalchemy.engine.Engine | select current_schema()
+2026-08-10 21:04:37,470 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 21:04:37,473 | INFO | sqlalchemy.engine.Engine | show standard_conforming_strings
+2026-08-10 21:04:37,474 | INFO | sqlalchemy.engine.Engine | [raw sql] {}
+2026-08-10 21:04:37,477 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 21:04:37,485 | INFO | sqlalchemy.engine.Engine | SELECT users.id AS users_id, users.email AS users_email, users.password_hash AS users_password_hash, users.full_name AS users_full_name, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s::UUID 
+ LIMIT %(param_1)s
+2026-08-10 21:04:37,486 | INFO | sqlalchemy.engine.Engine | [generated in 0.00174s] {'id_1': UUID('1673537b-f652-4b8b-874a-0e6597bc6b0d'), 'param_1': 1}
+2026-08-10 21:04:37,622 | INFO | sqlalchemy.engine.Engine | INSERT INTO documents (id, filename, file_path, file_size, content_type, extracted_text, status, workspace_id, created_at, updated_at) VALUES (%(id)s::UUID, %(filename)s, %(file_path)s, %(file_size)s, %(content_type)s, %(extracted_text)s, %(status)s, %(workspace_id)s::UUID, %(created_at)s, %(updated_at)s)
+2026-08-10 21:04:37,631 | INFO | sqlalchemy.engine.Engine | [generated in 0.01016s] {'id': UUID('51c57b8e-6353-409f-b1ab-074abeb35dd6'), 'filename': 'ICICIS_FINAL.docx', 'file_path': 'app\\storage\\uploads\\ICICIS_FINAL.docx', 'file_size': 64183, 'content_type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'extracted_text': 'A Machine Learning Framework for Stress Detection During Social Media Usage Using Wearable Physiological Signals\nDr Raghav Mehra AIT CSEChandigarh U ... (26584 characters truncated) ... nd Remote Monitoring," *2025 International Conference on Communication and Smart Devices, ICCoSD 2025*, 2025, doi: 10.1109/ICCOSD66074.2025.11348491.', 'status': 'PROCESSED', 'workspace_id': UUID('44496475-c6f2-4aea-9173-5b5ee7c00470'), 'created_at': datetime.datetime(2026, 8, 10, 15, 34, 37, 621964, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2026, 8, 10, 15, 34, 37, 621978, tzinfo=datetime.timezone.utc)}
+2026-08-10 21:04:37,667 | INFO | sqlalchemy.engine.Engine | COMMIT
+2026-08-10 21:04:37,681 | INFO | sqlalchemy.engine.Engine | BEGIN (implicit)
+2026-08-10 21:04:37,702 | INFO | sqlalchemy.engine.Engine | SELECT documents.id, documents.filename, documents.file_path, documents.file_size, documents.content_type, documents.extracted_text, documents.status, documents.workspace_id, documents.created_at, documents.updated_at 
+FROM documents 
+WHERE documents.id = %(pk_1)s::UUID
+2026-08-10 21:04:37,711 | INFO | sqlalchemy.engine.Engine | [generated in 0.00962s] {'pk_1': UUID('51c57b8e-6353-409f-b1ab-074abeb35dd6')}
+2026-08-10 21:04:37,797 | INFO | sqlalchemy.engine.Engine | ROLLBACK
