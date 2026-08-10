@@ -2727,3 +2727,6 @@ FROM documents
 WHERE documents.id = %(pk_1)s::UUID
 2026-08-09 10:34:34,414 | INFO | sqlalchemy.engine.Engine | [generated in 0.01073s] {'pk_1': UUID('cb7e198c-8b5b-4643-8c4e-b3c5d87ce322')}
 2026-08-09 10:34:34,429 | INFO | sqlalchemy.engine.Engine | ROLLBACK
+2026-08-09 11:44:28,932 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-09 11:59:49,745 | INFO | ai_workspace_agent | Registered Routes:
+2026-08-09 12:04:52,666 | INFO | ai_workspace_agent | Registered Routes:

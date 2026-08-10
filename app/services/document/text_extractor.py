@@ -11,6 +11,10 @@ class TextExtractor:
                 f"File not found: {file_path}"
             )
 
+        # PDF
+        if content_type == "application/pdf":
+            return self._extract_pdf(path)
+
         # DOCX
         if content_type == (
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -26,6 +30,23 @@ class TextExtractor:
 
         # Unsupported format
         return ""
+
+    def _extract_pdf(self, path: Path) -> str:
+        import fitz
+
+        document = fitz.open(path)
+
+        pages = []
+
+        for page in document:
+            text = page.get_text().strip()
+
+            if text:
+                pages.append(text)
+
+        document.close()
+
+        return "\n".join(pages)
 
     def _extract_docx(self, path: Path) -> str:
         from docx import Document

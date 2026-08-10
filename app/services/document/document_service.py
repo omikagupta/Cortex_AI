@@ -1,17 +1,25 @@
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 from fastapi import UploadFile
 from sqlalchemy.orm import Session
 
 from app.models import Document
-from app.repositories import DocumentRepository
-from app.services.extractors.extractor_factory import get_extractor
+from app.repositories.document_repository import DocumentRepository
 from app.services.chunking.document_chunk_service import DocumentChunkService
+from app.services.document.text_extractor import TextExtractor
 
+
+# =========================================
+# Upload directory
+# =========================================
 
 UPLOAD_DIR = Path("app/storage/uploads")
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+UPLOAD_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
 
 
 class DocumentService:
@@ -19,6 +27,7 @@ class DocumentService:
     def __init__(self):
         self.repository = DocumentRepository()
         self.chunk_service = DocumentChunkService()
+        self.text_extractor = TextExtractor()
 
     def upload_document(
         self,
@@ -34,83 +43,74 @@ class DocumentService:
         print("Filename:", file.filename)
         print("Content Type:", file.content_type)
 
-        # -----------------------------------------
+        # =========================================
         # 1. Save uploaded file
-        # -----------------------------------------
+        # =========================================
 
         file_path = UPLOAD_DIR / file.filename
 
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+            shutil.copyfileobj(
+                file.file,
+                buffer,
+            )
 
         print("File saved:", file_path)
         print("File size:", file_path.stat().st_size)
 
-        # -----------------------------------------
-        # 2. Find extractor
-        # -----------------------------------------
-
-        extractor = get_extractor(file.filename)
-
-        print("Extractor:", extractor)
+        # =========================================
+        # 2. Extract text
+        # =========================================
 
         extracted_text = None
         status = "UPLOADED"
 
-        # -----------------------------------------
-        # 3. Extract text
-        # -----------------------------------------
+        print("\n========================================")
+        print("STARTING TEXT EXTRACTION")
+        print("========================================")
 
-        if extractor:
+        try:
 
-            print("\n========================================")
-            print("EXTRACTOR FOUND")
-            print("========================================")
+            extracted_text = self.text_extractor.extract(
+                str(file_path),
+                file.content_type,
+            )
 
-            try:
+            print("EXTRACTION COMPLETED")
 
-                extracted_text = extractor(
-                    str(file_path)
-                )
+            print(
+                "Extracted text length:",
+                len(extracted_text)
+                if extracted_text
+                else 0,
+            )
 
-                print("EXTRACTION COMPLETED")
+            print("First 200 characters:")
 
-                print(
-                    "Extracted text length:",
-                    len(extracted_text)
-                    if extracted_text
-                    else 0
-                )
+            print(
+                extracted_text[:200]
+                if extracted_text
+                else "NO TEXT",
+            )
 
-                print("First 200 characters:")
-
-                print(
-                    extracted_text[:200]
-                    if extracted_text
-                    else "NO TEXT"
-                )
-
+            if extracted_text:
                 status = "PROCESSED"
-
-            except Exception as e:
-
-                print("\n========================================")
-                print("EXTRACTION FAILED")
-                print("ERROR:", repr(e))
-                print("========================================")
-
-                extracted_text = None
+            else:
                 status = "FAILED"
 
-        else:
+        except Exception as e:
 
             print("\n========================================")
-            print("NO EXTRACTOR FOUND")
+            print("EXTRACTION FAILED")
+            print("ERROR:", repr(e))
             print("========================================")
 
-        # -----------------------------------------
-        # 4. Create Document object
-        # -----------------------------------------
+            extracted_text = None
+            status = "FAILED"
+
+        # =========================================
+        # 3. Create Document object
+        # =========================================
 
         document = Document(
             filename=file.filename,
@@ -122,9 +122,9 @@ class DocumentService:
             workspace_id=workspace_id,
         )
 
-        # -----------------------------------------
-        # 5. Save Document
-        # -----------------------------------------
+        # =========================================
+        # 4. Save Document
+        # =========================================
 
         print("\nSaving document to database...")
 
@@ -136,9 +136,9 @@ class DocumentService:
         print("DATABASE SAVE COMPLETED")
         print("Document ID:", result.id)
 
-        # -----------------------------------------
-        # 6. Create chunks + embeddings
-        # -----------------------------------------
+        # =========================================
+        # 5. Create chunks + embeddings
+        # =========================================
 
         if extracted_text and status == "PROCESSED":
 
@@ -166,9 +166,9 @@ class DocumentService:
                 print("ERROR:", repr(e))
                 print("========================================")
 
-        # -----------------------------------------
-        # 7. Finish
-        # -----------------------------------------
+        # =========================================
+        # 6. Finish
+        # =========================================
 
         print("\n========================================")
         print("DOCUMENT UPLOAD FINISHED")
@@ -179,7 +179,7 @@ class DocumentService:
 
         print(
             "Extracted text:",
-            result.extracted_text is not None
+            result.extracted_text is not None,
         )
 
         print("========================================\n")
