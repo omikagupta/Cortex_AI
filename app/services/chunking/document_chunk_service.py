@@ -9,7 +9,9 @@ from app.services.embeddings.embedding_service import EmbeddingService
 class DocumentChunkService:
 
     def __init__(self):
+
         self.repository = DocumentChunkRepository()
+
         self.embedding_service = EmbeddingService()
 
     def create_chunks(
@@ -21,13 +23,14 @@ class DocumentChunkService:
         overlap: int = 200,
     ):
 
+        if not text or not text.strip():
+            raise ValueError(
+                "Cannot create chunks from empty text"
+            )
+
         print("\n========================================")
         print("DOCUMENT CHUNKING STARTED")
         print("========================================")
-
-        # -----------------------------------------
-        # 1. Create text chunks
-        # -----------------------------------------
 
         chunks = chunk_text(
             text,
@@ -35,14 +38,22 @@ class DocumentChunkService:
             overlap,
         )
 
-        print("Document ID:", document_id)
-        print("Total chunks:", len(chunks))
+        print(
+            "Document ID:",
+            document_id,
+        )
+
+        print(
+            "Total chunks:",
+            len(chunks),
+        )
+
+        if not chunks:
+            raise ValueError(
+                "Text chunking produced zero chunks"
+            )
 
         created_chunks = []
-
-        # -----------------------------------------
-        # 2. Process chunks
-        # -----------------------------------------
 
         for index, content in enumerate(chunks):
 
@@ -50,30 +61,37 @@ class DocumentChunkService:
             print("Processing chunk:", index)
             print("Content length:", len(content))
 
-            # -------------------------------------
-            # Generate Gemini embedding
-            # -------------------------------------
+            # =====================================
+            # Generate embedding
+            # =====================================
 
-            embedding = self.embedding_service.create_embedding(
-                content
+            print("Generating Gemini embedding...")
+
+            embedding = (
+                self.embedding_service.create_embedding(
+                    content
+                )
             )
+
+            if not embedding:
+                raise ValueError(
+                    f"Empty embedding returned for chunk {index}"
+                )
 
             print(
                 "Embedding dimension:",
-                len(embedding)
+                len(embedding),
             )
 
-            # -------------------------------------
-            # Convert embedding to JSON string
-            # -------------------------------------
+            # =====================================
+            # Save chunk
+            # =====================================
 
             import json
 
-            embedding_string = json.dumps(embedding)
-
-            # -------------------------------------
-            # Create DocumentChunk object
-            # -------------------------------------
+            embedding_string = json.dumps(
+                embedding
+            )
 
             chunk = DocumentChunk(
                 document_id=document_id,
@@ -82,26 +100,30 @@ class DocumentChunkService:
                 embedding=embedding_string,
             )
 
-            # -------------------------------------
-            # Save chunk
-            # -------------------------------------
-
             saved_chunk = self.repository.create(
                 db,
                 chunk,
             )
 
-            created_chunks.append(saved_chunk)
+            created_chunks.append(
+                saved_chunk
+            )
 
             print(
                 "Chunk saved:",
-                saved_chunk.id
+                saved_chunk.id,
             )
 
         print("\n========================================")
         print("DOCUMENT CHUNKING COMPLETED")
-        print("Created chunks:", len(created_chunks))
         print("========================================")
+
+        print(
+            "Created chunks:",
+            len(created_chunks),
+        )
+
+        print("========================================\n")
 
         return created_chunks
 

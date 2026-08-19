@@ -166,6 +166,11 @@ class DocumentService:
                 print("ERROR:", repr(e))
                 print("========================================")
 
+                result.status = "FAILED"
+                db.commit()
+
+                raise
+
         # =========================================
         # 6. Finish
         # =========================================

@@ -18,15 +18,22 @@ class SemanticSearchService:
         top_k: int = 5,
     ):
         # -----------------------------------------
-        # 1. Generate embedding for query
+        # 1. Validate query
         # -----------------------------------------
 
-        query_embedding = self.embedding_service.generate_embedding(
+        if not query or not query.strip():
+            raise ValueError("Search query cannot be empty")
+
+        # -----------------------------------------
+        # 2. Generate embedding for query
+        # -----------------------------------------
+
+        query_embedding = self.embedding_service.create_embedding(
             query
         )
 
         # -----------------------------------------
-        # 2. Search similar chunks
+        # 3. Search similar chunks
         # -----------------------------------------
 
         results = self.repository.search_similar(

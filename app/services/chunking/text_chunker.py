@@ -1,3 +1,6 @@
+import re
+
+
 def chunk_text(
     text: str,
     chunk_size: int = 1000,
@@ -8,28 +11,95 @@ def chunk_text(
         return []
 
     if chunk_size <= 0:
-        raise ValueError("chunk_size must be greater than 0")
+        raise ValueError(
+            "chunk_size must be greater than 0"
+        )
 
     if overlap < 0:
-        raise ValueError("overlap cannot be negative")
+        raise ValueError(
+            "overlap cannot be negative"
+        )
 
     if overlap >= chunk_size:
-        raise ValueError("overlap must be smaller than chunk_size")
+        raise ValueError(
+            "overlap must be smaller than chunk_size"
+        )
+
+
+    # =================================================
+    # Split document by numbered questions
+    # Example:
+    #
+    # 1. Question...
+    # 2. Question...
+    # 3. Question...
+    #
+    # Each question + answer becomes a meaningful chunk
+    # =================================================
+
+    sections = re.split(
+        r'(?=\n?\d+\.\s)',
+        text,
+    )
+
 
     chunks = []
 
-    start = 0
-    text_length = len(text)
+    current_chunk = ""
 
-    while start < text_length:
 
-        end = start + chunk_size
+    for section in sections:
 
-        chunk = text[start:end].strip()
+        section = section.strip()
 
-        if chunk:
-            chunks.append(chunk)
 
-        start += chunk_size - overlap
+        if not section:
+            continue
+
+
+        # ---------------------------------------------
+        # Add section if it fits current chunk
+        # ---------------------------------------------
+
+        if (
+            len(current_chunk) + len(section)
+            <= chunk_size
+        ):
+
+            current_chunk += (
+                section
+                + "\n\n"
+            )
+
+
+        else:
+
+            # Save previous chunk
+
+            if current_chunk:
+
+                chunks.append(
+                    current_chunk.strip()
+                )
+
+
+            # Start new chunk
+
+            current_chunk = (
+                section
+                + "\n\n"
+            )
+
+
+    # ---------------------------------------------
+    # Save remaining chunk
+    # ---------------------------------------------
+
+    if current_chunk:
+
+        chunks.append(
+            current_chunk.strip()
+        )
+
 
     return chunks

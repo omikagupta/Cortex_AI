@@ -296,8 +296,8 @@ class VectorSearchService:
             # -----------------------------------------
 
             final_score = (
-                0.60 * semantic_score
-                + 0.25 * keyword_score
+                0.50 * semantic_score
+                + 0.35 * keyword_score
                 + 0.15 * relevance_score
             )
 
